@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- font awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- my style -->
+  <link rel="stylesheet" href="css/style.css" />
+  <title>Boolzapp</title>
+</head>
+
+<body>
+  <div class="bg-top"></div>
+
+  <div id="app">
+    <div id="app-container" class="d-flex">
+      <!-- LEFT PANEL -->
+      <aside id="left-container">
+
+        <!-- user -->
+        <div id="user-container" class="container d-flex align-items-center">
+          <img src="./img/avatar_io.jpg" alt="user img">
+          <div id="user-name">Sofia</div>
+          <div class="btns container">
+            <button type="button" class="btn"><i class="fa-solid fa-circle-notch"></i></button>
+            <button type="button" class="btn"><i class="fa-solid fa-message"></i></button>
+            <button type="button" class="btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          </div>
+        </div>
+
+        <!-- notification -->
+        <div id="notification" class="container d-flex align-items-center">
+          <i id="notification-bell" class="fa-solid fa-bell-slash"></i>
+          <div>
+            <p>Ricevi notifiche di nuovi messaggi</p>
+            <small><a href="#">Attiva notifiche desktop</a></small>
+          </div>
+        </div>
+
+        <!-- search bar -->
+        <div id="contacts-search" class="container">
+          <div class="input-group d-flex">
+            <label for="search-bar"><i class="fa-solid fa-magnifying-glass"></i></label>
+            <input class="d-grow" type="text" id="search-bar" placeholder="Cerca o inizia una nuova chat">
+          </div>
+        </div>
+
+        <!-- contacts list -->
+        <!-- ricordarsi di assegnare  classe "selected" -->
+        <div id="contacts-list">
+
+          <div v-for="(contact,index) in contacts" :class="selected == index ? 'selected':''" class="contact container d-flex">
+            <img :src="contact.avatar" :alt="contact.name + ' avatar'">
+            <div>
+              <div class="contact-name">{{contact.name}}</div>
+              <div class="last-msg">Ultimo messaggio inviato</div>
+            </div>
+            <div class="msg-time">12:00</div>
+          </div>
+        </div>
+      </aside>
+      <!-- /LEFT PANEL -->
+
+      <!-- RIGHT PANEL -->
+      <div id="right-container">
+
+        <!-- selected contact -->
+        <div id="selected-contact" class="container d-flex align-items-center">
+          <img src="./img/avatar_1.jpg" alt="selected contact img">
+          <div>
+            <div class="contact-name">Michele</div>
+            <div class="contact-last-access"> Ultimo accesso oggi alle 12:00</div>
+          </div>
+          
+          <div class="btns container">
+            <button type="button" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button type="button" class="btn"><i class="fa-solid fa-paperclip"></i></button>
+            <button type="button" class="btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          </div>
+        </div>
+
+        <!-- messages container -->
+        <div id="messages-container">
+          <div class="msg-container d-flex">
+            <div class="sent msg">
+              <p>Hai portato a spasso il cane?</p>
+              <div class="msg-time">15:30</div>
+            </div>
+          </div>
+          <div class="msg-container d-flex">
+            <div class="received msg">
+              <p>Tutto fatto !</p>
+              <div class="msg-time">16:15</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- chat inputs -->
+        <div id="chat-inputs" class="container d-flex align-items-center justify-content-center">
+          <i class="dark btn fa-regular fa-face-smile"></i>
+          <div class="input-group d-flex d-grow">
+            <input class="d-grow" type="text" id="msg-bar" placeholder="Scrivi un messaggio">
+          </div>
+          <i class="dark btn fa-solid fa-microphone"></i>
+        </div>
+
+      </div>
+      <!-- /RIGHT PANEL -->
+    </div>
+  </div>
+
+  <!-- data -->
+  <script type="text/javascript" src="js/data.js"></script>
+  <!-- vuejs script -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <!-- my script -->
+  <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>

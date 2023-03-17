@@ -1,0 +1,222 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+}
+
+:root {
+  /* backgrounds */
+  --body-bg : #dbdbdb;
+  --body-top-bg: #009688;
+  --app-bg: #eaeaea;
+  --notification-bg: #8edafc;
+  --search-bg: #f9f9f9;
+  --input-group-bg: white;
+  --contact-bg : white;
+  --selected-contact-bg : #e9ebeb;
+  --chat-inputs-bg : #f3eeea;
+  --sent-msg-bg : #d5f9ba;
+  --received-msg-bg : white;
+  /* borders  */
+  --app-border: #d5d5d4;
+  --input-border-color: #e9ebeb;
+  /* btn */
+  --btn-color: #b1b1b1;
+  --btn-dark-color: #6b7376;
+  /* text */
+  --text-gray : #b1b1b1;
+}
+
+/* utility */
+.d-flex {
+  display: flex;
+}
+.align-items-center {
+  align-items: center;
+}
+.justify-content-center {
+  justify-content: center;
+}
+.d-grow {
+  flex-grow: 1;
+}
+.btn {
+  border: none;
+  padding: 0 0.2rem;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  color: var(--btn-color);
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+.dark.btn {
+  color: var(--btn-dark-color);
+}
+.btn:hover {
+  background-color: transparent;
+  color: var(--btn-dark-color);
+}
+.container {
+  padding: 0.5rem 1rem;
+}
+
+/* style  */
+body {
+  background-color: var(--body-bg);
+}
+.bg-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-color: var(--body-top-bg);
+  z-index: -1;
+}
+
+#app-container {
+  min-width: 800px;
+  max-width: 1170px;
+  height: calc(100vh - 4rem);
+  margin: 2rem auto;
+  background-color: var(--app-bg);
+  box-shadow: 0 0 3px 0 lightgray;
+}
+
+#left-container {
+  width: 40%;
+  height: 100%;
+  border-right: solid 1px var(--app-border);
+}
+
+#right-container {
+  width: 60%;
+  height: 100%;
+}
+
+#user-container img, #selected-contact img{
+  object-fit: contain;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  margin-left: -0.5rem;
+}
+
+.btns.container {
+  margin-left: auto;
+}
+
+#notification.container {
+  padding: 1rem;
+  background-color: var(--notification-bg);
+}
+#notification-bell {
+  width: 50px;
+  margin-right: 1rem;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 50px;
+  font-size: 1.4rem;
+  color: var(--notification-bg);
+  background-color: white; 
+}
+#notification a {
+  color: var(--btn-dark-color);
+}
+#contacts-search.container {
+  background-color: var(--search-bg);
+  padding: 0.5rem;
+}
+.input-group {
+  border: solid 1px var(--input-border-color);
+  border-radius: 0.2rem;
+  overflow: hidden;
+}
+.input-group label {
+  padding: 0.5rem 1.5rem;
+  text-align: center;
+  color: var(--btn-color);
+  border-right: solid 1px var(--input-border-color);
+  background-color: var(--input-group-bg);
+}
+.input-group input {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: var(--input-group-bg);
+}
+
+#contacts-list {
+  overflow-y: scroll;
+}
+#contacts-list .contact {
+  background-color: var(--contact-bg);
+}
+#contacts-list .selected.contact {
+  background-color: var(--selected-contact-bg) ;
+}
+#contacts-list .contact img {
+  object-fit: contain;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 1rem 0 0.5rem;
+}
+
+#contacts-list .contact-name {
+  font-size: 1.2rem;
+}
+#contacts-list .last-msg {
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  color: var(--text-gray);
+}
+.msg-time {
+  text-align: end;
+  font-size: 0.7rem;
+  margin-left: auto;
+  color: var(--text-gray);
+}
+
+.contact-last-access {
+  color: var(--text-gray);
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+#messages-container {
+  height: calc(100% - 116px);
+  padding: 2.5rem 4rem;
+  overflow-y: scroll;
+  background: repeat url(../img/mine.jpg);
+}
+#messages-container .msg-container {
+  margin-bottom: 0.5rem;
+}
+
+.msg {
+  min-width: 40%;
+  max-width: 80%;
+  border-radius: 0.5rem;
+  padding: 1rem 1rem 0.2rem ;
+}
+.sent.msg {
+  margin-left: auto;
+  background-color: var(--sent-msg-bg);
+}
+.received.msg {
+  margin-right: auto;
+  background-color: var(--received-msg-bg) ;
+}
+#messages-container .msg-time {
+  margin-right: -0.5rem;
+  margin-top: 0.5rem;
+}
+
+#chat-inputs {
+  background-color: var(--chat-inputs-bg) ;
+}
+#chat-inputs .btn {
+  margin: 0 2rem;
+}
