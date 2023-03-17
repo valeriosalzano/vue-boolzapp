@@ -55,9 +55,9 @@
             <img :src="contact.avatar" :alt="contact.name + ' avatar'">
             <div>
               <div class="contact-name">{{contact.name}}</div>
-              <div class="last-msg">Ultimo messaggio inviato</div>
+              <div class="last-msg">{{contact.messages[contact.messages.length-1].message}}</div>
             </div>
-            <div class="msg-time">12:00</div>
+            <div class="msg-time">{{getLastMsgTime(index)}}</div>
           </div>
         </div>
       </aside>
@@ -87,10 +87,10 @@
           <div v-for="msg in contacts[selected].messages" class="msg-container d-flex">
             <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg">
               <p>{{msg.message}}</p>
-              <div class="msg-time">{{msg.date}}</div>
+              <div class="msg-time">{{getMsgTime(msg)}}</div>
             </div>
           </div>
-          
+
         </div>
 
         <!-- chat inputs -->
