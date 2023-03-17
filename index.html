@@ -49,10 +49,9 @@
         </div>
 
         <!-- contacts list -->
-        <!-- ricordarsi di assegnare  classe "selected" -->
         <div id="contacts-list">
 
-          <div v-for="(contact,index) in contacts" :class="selected == index ? 'selected':''" class="contact container d-flex">
+          <div v-for="(contact,index) in contacts" :class="selected == index ? 'selected':''" class="contact container d-flex" @click="clickOnContact(index)">
             <img :src="contact.avatar" :alt="contact.name + ' avatar'">
             <div>
               <div class="contact-name">{{contact.name}}</div>
@@ -69,9 +68,9 @@
 
         <!-- selected contact -->
         <div id="selected-contact" class="container d-flex align-items-center">
-          <img src="./img/avatar_1.jpg" alt="selected contact img">
+          <img :src="contacts[selected].avatar" :alt="contacts[selected].name + ' avatar'">
           <div>
-            <div class="contact-name">Michele</div>
+            <div class="contact-name">{{contacts[selected].name}}</div>
             <div class="contact-last-access"> Ultimo accesso oggi alle 12:00</div>
           </div>
           
@@ -84,18 +83,14 @@
 
         <!-- messages container -->
         <div id="messages-container">
-          <div class="msg-container d-flex">
-            <div class="sent msg">
-              <p>Hai portato a spasso il cane?</p>
-              <div class="msg-time">15:30</div>
+
+          <div v-for="msg in contacts[selected].messages" class="msg-container d-flex">
+            <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg">
+              <p>{{msg.message}}</p>
+              <div class="msg-time">{{msg.date}}</div>
             </div>
           </div>
-          <div class="msg-container d-flex">
-            <div class="received msg">
-              <p>Tutto fatto !</p>
-              <div class="msg-time">16:15</div>
-            </div>
-          </div>
+          
         </div>
 
         <!-- chat inputs -->

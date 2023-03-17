@@ -6,5 +6,10 @@ const { createApp } = Vue
         contacts: contacts,
         selected: 0,
       }
+    },
+    methods: {
+      clickOnContact(index){
+        this.selected = index;
+      }
     }
   }).mount('#app');

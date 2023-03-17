@@ -80,7 +80,7 @@ body {
 
 #app-container {
   min-width: 800px;
-  max-width: 1170px;
+  width: 80vw;
   height: calc(100vh - 4rem);
   margin: 2rem auto;
   background-color: var(--app-bg);
@@ -151,6 +151,8 @@ body {
 
 #contacts-list {
   overflow-y: scroll;
+  background-color: white;
+  height: calc(100% - 200px);
 }
 #contacts-list .contact {
   background-color: var(--contact-bg);
@@ -198,7 +200,7 @@ body {
 .msg {
   min-width: 40%;
   max-width: 80%;
-  border-radius: 0.5rem;
+  border-radius: 0.8rem;
   padding: 1rem 1rem 0.2rem ;
 }
 .sent.msg {
