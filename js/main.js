@@ -8,6 +8,7 @@ const { createApp } = Vue
         userMsg : '',
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
+        selectedMsg: -1,
       }
     },
     methods: {
@@ -36,6 +37,7 @@ const { createApp } = Vue
         this.autoReply();
       },
       autoReply(){
+        // salvo il selected in una variabile per evitare che il timeout stampi su un contatto diverso
         let selected = this.selected;
         this.msgBarPlaceholder = `${this.contacts[selected].name} sta scrivendo...`;
         setTimeout(()=>{
@@ -57,6 +59,16 @@ const { createApp } = Vue
           // caso 2: scorro la lista, il contatto è visibile se c'è un match nel nome
           this.contacts.forEach( contact => contact.visible = contact.name.match(new RegExp(`${this.searchBarInput}`,'i')))
         }
+      },
+      clickOnMsg(index){
+        this.selectedMsg = index;
+      },
+      clickOnDeleteMsg(index){
+        this.contacts[this.selected].messages.splice(index,1);
+        this.resetSelectedMsg();
+      },
+      resetSelectedMsg(){
+        this.selectedMsg = -1;
       }
     }
   }).mount('#app');

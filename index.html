@@ -15,7 +15,7 @@
 <body>
   <div class="bg-top"></div>
 
-  <div id="app">
+  <div id="app" v-cloak>
     <div id="app-container" class="d-flex">
       <!-- LEFT PANEL -->
       <aside id="left-container">
@@ -84,10 +84,17 @@
         <!-- messages container -->
         <div id="messages-container">
 
-          <div v-for="msg in contacts[selected].messages" class="msg-container d-flex">
-            <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg">
+          <div v-for="(msg,index,messages) in contacts[selected].messages" class="msg-container d-flex">
+            <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg" @click="clickOnMsg(index)" @mouseleave="resetSelectedMsg">
               <p>{{msg.message}}</p>
               <div class="msg-time">{{getMsgTime(msg)}}</div>
+              <div v-if="selectedMsg == index" class="msgMenu">
+                <p class="text-end"><i class="fa-solid fa-chevron-down"></i></p>
+                <ul class="menu-options">
+                  <li> Message info </li>
+                  <li v-if="msg.status == 'sent'" @click.stop="clickOnDeleteMsg(index)"> Delete message </li>
+                </ul>
+              </div>
             </div>
           </div>
 

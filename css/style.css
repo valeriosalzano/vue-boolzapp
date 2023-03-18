@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+[v-cloak]{
+  display: none;
+}
+
 html {
   font-family: sans-serif;
 }
@@ -21,6 +25,7 @@ html {
   --chat-inputs-bg : #f3eeea;
   --sent-msg-bg : #d5f9ba;
   --received-msg-bg : white;
+  --msgMenu-bg: white;
   /* borders  */
   --app-border: #d5d5d4;
   --input-border-color: #e9ebeb;
@@ -31,7 +36,8 @@ html {
   --text-gray : #b1b1b1;
 }
 
-/* utility */
+/* UTILITY */
+
 .d-flex {
   display: flex;
 }
@@ -43,6 +49,9 @@ html {
 }
 .d-grow {
   flex-grow: 1;
+}
+.text-end {
+  text-align: end;
 }
 .btn {
   border: none;
@@ -64,7 +73,9 @@ html {
   padding: 0.5rem 1rem;
 }
 
-/* style  */
+/* STYLE  */
+
+
 body {
   background-color: var(--body-bg);
 }
@@ -91,6 +102,7 @@ body {
   width: 40%;
   height: 100%;
   border-right: solid 1px var(--app-border);
+  overflow: hidden;
 }
 
 #right-container {
@@ -199,14 +211,36 @@ body {
 }
 
 .msg {
+  position: relative;
   min-width: 40%;
   max-width: 80%;
   border-radius: 0.8rem;
-  padding: 1rem 1rem 0.2rem ;
+  padding: 1rem 1.5rem 0.2rem ;
+  box-shadow: 0px 5px 5px 0 gray;
+  font-size: 0.9rem;
 }
 .sent.msg {
   margin-left: auto;
   background-color: var(--sent-msg-bg);
+}
+.msgMenu {
+  position: absolute;
+  right: 0.3rem;
+  top: 40%;
+  z-index: 9;
+}
+.msgMenu ul{
+  list-style: none;
+  background-color: var(--msgMenu-bg);
+  box-shadow: 0 0 2px 0 lightgray;
+  border-radius: 0.2rem;
+  overflow: hidden;
+}
+.msgMenu li{
+  padding: 0.5rem 1rem;
+}
+.msgMenu li:hover {
+  background-color: var(--selected-contact-bg);
 }
 .received.msg {
   margin-right: auto;
