@@ -147,6 +147,7 @@ body {
   padding: 0.5rem 1rem;
   border: none;
   background-color: var(--input-group-bg);
+  outline: none;
 }
 
 #contacts-list {

@@ -44,14 +44,14 @@
         <div id="contacts-search" class="container">
           <div class="input-group d-flex">
             <label for="search-bar"><i class="fa-solid fa-magnifying-glass"></i></label>
-            <input class="d-grow" type="text" id="search-bar" placeholder="Cerca o inizia una nuova chat">
+            <input id="search-bar" class="d-grow" v-model="searchBarInput" type="text" placeholder="Cerca o inizia una nuova chat" @keyup="onContactSearching()">
           </div>
         </div>
 
         <!-- contacts list -->
         <div id="contacts-list">
 
-          <div v-for="(contact,index) in contacts" :class="selected == index ? 'selected':''" class="contact container d-flex" @click="clickOnContact(index)">
+          <div v-for="(contact,index) in contacts" v-show="contact.visible" :class="selected == index ? 'selected':''" class="contact container d-flex" @click="clickOnContact(index)">
             <img :src="contact.avatar" :alt="contact.name + ' avatar'">
             <div>
               <div class="contact-name">{{contact.name}}</div>

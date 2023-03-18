@@ -7,6 +7,7 @@ const { createApp } = Vue
         selected: 0,
         userMsg : '',
         msgBarPlaceholder : 'Scrivi un messaggio',
+        searchBarInput : '' ,
       }
     },
     methods: {
@@ -47,6 +48,15 @@ const { createApp } = Vue
           );
           this.msgBarPlaceholder = 'Scrivi un messaggio';
         },1000)
+      },
+      onContactSearching(){
+        if(!this.searchBarInput){
+          // caso 1: campo vuoto, scorro tutti i contatti e li rendo visibili
+          this.contacts.forEach( contact => contact.visible = true);
+        } else {
+          // caso 2: scorro la lista, il contatto è visibile se c'è un match nel nome
+          this.contacts.forEach( contact => contact.visible = contact.name.match(new RegExp(`${this.searchBarInput}`,'i')))
+        }
       }
     }
   }).mount('#app');
