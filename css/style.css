@@ -233,6 +233,7 @@ body {
   background-color: var(--sent-msg-bg);
 }
 .msgMenu {
+  min-width: 80%;
   position: absolute;
   right: 0.3rem;
   top: 40%;

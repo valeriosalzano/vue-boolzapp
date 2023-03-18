@@ -10,7 +10,6 @@ const { createApp } = Vue
         searchBarInput : '' ,
         selectedMsg: -1,
         printDateLineVar : '000',
-        printDateVar: '',
       }
     },
     methods: {
@@ -28,17 +27,18 @@ const { createApp } = Vue
       },
       // funzione che gestisce l'invio di un messaggio
       sendMsg(){
-        this.contacts[this.selected].messages.push(
-          { 
-          date: luxon.DateTime.now().toFormat('d/MM/yyyy HH:mm:ss'),
-          message: this.userMsg,
-          status: 'sent'
-          }
-        );
-        this.userMsg = '';
-        this.autoReply();
-        this.goToLastMsg(200);
-
+        if(this.userMsg.trim()){
+          this.contacts[this.selected].messages.push(
+            { 
+            date: luxon.DateTime.now().toFormat('d/MM/yyyy HH:mm:ss'),
+            message: this.userMsg,
+            status: 'sent'
+            }
+          );
+          this.userMsg = '';
+          this.autoReply();
+          this.goToLastMsg(200);
+        }
       },
       // funzione che fa rispondere dopo 1 secondo il contatto con "ok" quando si invia un messaggio
       autoReply(){
@@ -80,7 +80,7 @@ const { createApp } = Vue
       resetSelectedMsg(){
         this.selectedMsg = -1;
       },
-      // funzione che evidenza l'ultimo messaggio scrollando fino a raggiungerlo
+      // funzione che evidenzia l'ultimo messaggio scrollando fino a raggiungerlo
       goToLastMsg(timer){
         const lastMsgArray = document.querySelectorAll('.msg');
         const lastMsg =lastMsgArray[lastMsgArray.length-1];
@@ -88,6 +88,7 @@ const { createApp } = Vue
           lastMsg.scrollIntoView({behavior:"smooth"});
         },timer);
       },
+      // funzione che determina se è il primo messaggio del giorno per stamparne sopra la data
       printDateLine(msg,index){
         if (index == 0){
           this.printDateLineVar = '000';
@@ -100,6 +101,7 @@ const { createApp } = Vue
           return false;
         }
       },
+      // funzione che determina come sarà stampata la data di printDateLine
       printDate(msg){
         let date = luxon.DateTime.fromFormat(msg.date,'dd/MM/yyyy HH:mm:ss').toFormat('dd MMM yyyy');
         return date;
