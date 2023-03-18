@@ -3,27 +3,50 @@ const { createApp } = Vue
   createApp({
     data() {
       return {
-        contacts: {...contacts},
+        contacts,
         selected: 0,
+        userMsg : '',
+        msgBarPlaceholder : 'Scrivi un messaggio',
       }
     },
     methods: {
+      // al click dell'utente cambia il contatto mostrato
       clickOnContact(index){
         this.selected = index;
       },
+      // funzione che restituisce l'ultimo messaggio scambiato con un contatto
+      getLastMsg(contact){
+        return contact.messages[contact.messages.length -1];
+      },
+      // funzione che restituisce solo ora e minuti dalla stringa della data
       getMsgTime(message){
-        // data in dd/mm/yyyy bisogna riordinare per ottenere mm/dd/yyyy
-        let msgDate = message.date;
-        msgDate = msgDate.split('/');
-        msgDate = msgDate[1]+'/'+msgDate[0]+'/'+msgDate[2];
-        // data riordinata
-        msgDate = new Date (msgDate);
-        msgDate = msgDate.getHours()+':'+msgDate.getMinutes();
-        return msgDate;
+        let msgTime = message.date;
+        return msgTime.substring(msgTime.length - 8, msgTime.length - 3);
       },
-      getLastMsgTime(index){
-        let msg = contacts[index].messages[this.contacts[index].messages.length-1];
-        return this.getMsgTime(msg);
+      sendMsg(){
+        this.contacts[this.selected].messages.push(
+          { 
+          date: '10/01/2020 15:30:55',
+          message: this.userMsg,
+          status: 'sent'
+          }
+        );
+        this.userMsg = '';
+        this.autoReply();
       },
+      autoReply(){
+        let selected = this.selected;
+        this.msgBarPlaceholder = `${this.contacts[selected].name} sta scrivendo...`;
+        setTimeout(()=>{
+          this.contacts[selected].messages.push(
+            { 
+            date: '10/01/2020 15:30:55',
+            message: 'ok',
+            status: 'received'
+            }
+          );
+          this.msgBarPlaceholder = 'Scrivi un messaggio';
+        },1000)
+      }
     }
   }).mount('#app');
