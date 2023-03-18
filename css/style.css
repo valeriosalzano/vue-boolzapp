@@ -41,6 +41,9 @@ html {
 .d-flex {
   display: flex;
 }
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .align-items-center {
   align-items: center;
 }
@@ -52,6 +55,9 @@ html {
 }
 .text-end {
   text-align: end;
+}
+.text-center {
+  text-align: center;
 }
 .btn {
   border: none;
@@ -209,7 +215,10 @@ body {
 #messages-container .msg-container {
   margin-bottom: 0.5rem;
 }
-
+#date-line {
+  width: 100%;
+  margin: 0.5rem 0;
+}
 .msg {
   position: relative;
   min-width: 40%;

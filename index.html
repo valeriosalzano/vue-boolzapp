@@ -84,7 +84,8 @@
         <!-- messages container -->
         <div id="messages-container">
 
-          <div v-for="(msg,index,messages) in contacts[selected].messages" class="msg-container d-flex">
+          <div v-for="(msg,index) in contacts[selected].messages" class="msg-container d-flex flex-wrap">
+            <div v-if="printDateLine(msg,index)" id="date-line" class="text-center"><small>{{printDate(msg)}}</small> </div>
             <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg" @click="clickOnMsg(index)" @mouseleave="resetSelectedMsg">
               <p>{{msg.message}}</p>
               <div class="msg-time">{{getMsgTime(msg)}}</div>
@@ -116,6 +117,8 @@
 
   <!-- data -->
   <script type="text/javascript" src="js/data.js"></script>
+  <!-- luxon script -->
+  <script src=" https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js "></script>
   <!-- vuejs script -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <!-- my script -->
