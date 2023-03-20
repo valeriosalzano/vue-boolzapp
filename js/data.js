@@ -159,5 +159,35 @@ const contacts = [
         status: 'received'
       }
     ],
+  },
+  {
+    name: 'chat GPT',
+    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0SGq5ryvPkabjn_1Zd0W8cqpOQsH2kzrO61_nyOa_pyzpYcUA7FrrbMixbVBDdsSEX50&usqp=CAU',
+    visible: true,
+    messages: []
   }
 ];
+
+const randomReplies = {
+
+  greeting: [
+    'Ciao',
+    'Ehy',
+    'Salve',
+  ],
+  answer: [
+    'ok',
+    'va bene',
+    'no',
+    'certo',
+    'assolutamente no'
+  ],
+  randomSentence: [
+    'frase 1',
+    'frase 2',
+    'frase 3',
+    'frase 4',
+    'frase 5'
+  ]
+
+};

@@ -83,16 +83,7 @@ html {
 
 
 body {
-  background-color: var(--body-bg);
-}
-.bg-top {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 150px;
-  background-color: var(--body-top-bg);
-  z-index: -1;
+  background: linear-gradient( to bottom, var(--body-top-bg) 20%, var(--body-bg) 20% 100%) ;
 }
 
 #app-container {
@@ -174,6 +165,7 @@ body {
   height: calc(100% - 200px);
 }
 #contacts-list .contact {
+  position: relative;
   background-color: var(--contact-bg);
 }
 #contacts-list .selected.contact {
@@ -185,14 +177,24 @@ body {
   border-radius: 50%;
   margin: 0 1rem 0 0.5rem;
 }
-
+#contacts-list .contact-text {
+  max-width: calc(100% - 100px);
+}
 #contacts-list .contact-name {
   font-size: 1.2rem;
 }
 #contacts-list .last-msg {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 0.9rem;
   line-height: 1.4rem;
   color: var(--text-gray);
+}
+#contacts-list .msg-time {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
 }
 .msg-time {
   text-align: end;

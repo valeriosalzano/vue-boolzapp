@@ -13,7 +13,6 @@
 </head>
 
 <body>
-  <div class="bg-top"></div>
 
   <div id="app" v-cloak>
     <div id="app-container" class="d-flex">
@@ -53,11 +52,11 @@
 
           <div v-for="(contact,index) in contacts" v-show="contact.visible" :class="selected == index ? 'selected':''" class="contact container d-flex" @click="clickOnContact(index)">
             <img :src="contact.avatar" :alt="contact.name + ' avatar'">
-            <div>
+            <div class="contact-text">
               <div class="contact-name">{{contact.name}}</div>
-              <div class="last-msg">{{getLastMsg(contact).message}}</div>
+              <div v-if="contact.messages.length" class="last-msg">{{getLastMsg(contact).message}}</div>
             </div>
-            <div class="msg-time">{{getMsgTime(getLastMsg(contact))}}</div>
+            <div v-if="contact.messages.length" class="msg-time">{{getMsgDate(getLastMsg(contact))}}</div>
           </div>
         </div>
       </aside>
@@ -71,7 +70,7 @@
           <img :src="contacts[selected].avatar" :alt="contacts[selected].name + ' avatar'">
           <div>
             <div class="contact-name">{{contacts[selected].name}}</div>
-            <div class="contact-last-access"> Ultimo accesso oggi alle 12:00</div>
+            <div class="contact-last-access"> {{contactLastAccess ? contactLastAccess : getLastAccessTime()}} </div>
           </div>
           
           <div class="btns container">
@@ -84,16 +83,17 @@
         <!-- messages container -->
         <div id="messages-container">
 
-          <div v-for="(msg,index) in contacts[selected].messages" class="msg-container d-flex flex-wrap">
+          <div v-if="!contacts[selected].messages.length">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
+          <div v-else v-for="(msg,index) in contacts[selected].messages" class="msg-container d-flex flex-wrap">
             <div v-if="printDateLine(msg,index)" id="date-line" class="text-center"><small>{{printDate(msg)}}</small> </div>
-            <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg" @click="clickOnMsg(index)" @mouseleave="resetSelectedMsg">
+            <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg" @mouseenter="mouseenterOnMsg(index)" @mouseleave="resetSelectedMsg">
               <p>{{msg.message}}</p>
               <div class="msg-time">{{getMsgTime(msg)}}</div>
               <div v-if="selectedMsg == index" class="msgMenu">
-                <p class="text-end"><i class="fa-solid fa-chevron-down"></i></p>
-                <ul class="menu-options">
+                <p class="text-end" @click="clickOnMsg()"><i class="fa-solid fa-chevron-down"></i></p>
+                <ul v-if="clickedMsg" class="menu-options">
                   <li> Message info </li>
-                  <li v-if="msg.status == 'sent'" @click.stop="clickOnDeleteMsg(index)"> Delete message </li>
+                  <li @click.stop="clickOnDeleteMsg(index)"> Delete message </li>
                 </ul>
               </div>
             </div>
@@ -107,7 +107,8 @@
           <div class="input-group d-flex d-grow">
             <input v-model="userMsg" id="msg-bar" class="d-grow" type="text" :placeholder="msgBarPlaceholder" @keyup.enter="sendMsg">
           </div>
-          <i class="dark btn fa-solid fa-microphone"></i>
+          <i v-if="!userMsg" class="dark btn fa-solid fa-microphone"></i>
+          <i v-else class=" dark btn fa-solid fa-paper-plane" @click="sendMsg()"></i>
         </div>
 
       </div>
