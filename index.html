@@ -90,7 +90,7 @@
               <p>{{msg.message}}</p>
               <div class="msg-time">{{getMsgTime(msg)}}</div>
               <div v-if="selectedMsg == index" class="msgMenu">
-                <p class="text-end" @click="clickOnMsg()"><i class="fa-solid fa-chevron-down"></i></p>
+                <p class="text-end"><i class="fa-solid fa-chevron-down" @click="clickOnMsg()"></i></p>
                 <ul v-if="clickedMsg" class="menu-options">
                   <li> Message info </li>
                   <li @click.stop="clickOnDeleteMsg(index)"> Delete message </li>

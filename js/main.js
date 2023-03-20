@@ -30,11 +30,16 @@ const { createApp } = Vue
           do {
             index --;
             message = this.contacts[this.selected].messages[index];
-          } while (message.status == 'sent')
+          } while (message.status == 'sent' && index > 0)
 
-          let newDate = luxon.DateTime.fromFormat(message.date,'dd/MM/yyyy HH:mm:ss');
-          return `Ultimo accesso ${newDate.toRelativeCalendar()} alle ${newDate.toFormat('HH:mm')}`;
-
+          if (index != -1 && message.status != 'sent'){
+            let newDate = luxon.DateTime.fromFormat(message.date,'dd/MM/yyyy HH:mm:ss');
+            this.contactLastAccess = `Ultimo accesso ${newDate.toRelativeCalendar()} alle ${newDate.toFormat('HH:mm')}`;
+          } else {
+            this.contactLastAccess = 'Ultimo accesso molto tempo fa.'
+          }
+        } else {
+          this.contactLastAccess = 'Ultimo accesso molto tempo fa.'
         }
       },
       // funzione che restituisce l'ultimo messaggio scambiato con un contatto
