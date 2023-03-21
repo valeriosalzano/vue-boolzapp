@@ -20,10 +20,10 @@
       <aside id="left-container">
 
         <!-- user -->
-        <div id="user-container" class="container d-flex align-items-center">
-          <img src="./img/avatar_io.jpg" alt="user img">
-          <div id="user-name">Sofia</div>
-          <div class="btns container">
+        <div id="user" class="container d-flex align-items-center">
+          <img :src="user.avatar" alt="user img">
+          <h3 id="user-name" class="d-inline-block">{{user.name}}</h3>
+          <div class="btns to-right">
             <button type="button" class="btn"><i class="fa-solid fa-circle-notch"></i></button>
             <button type="button" class="btn"><i class="fa-solid fa-message"></i></button>
             <button type="button" class="btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
@@ -40,23 +40,21 @@
         </div>
 
         <!-- search bar -->
-        <div id="contacts-search" class="container">
-          <div class="input-group d-flex">
-            <label for="search-bar"><i class="fa-solid fa-magnifying-glass"></i></label>
-            <input id="search-bar" class="d-grow" v-model="searchBarInput" type="text" placeholder="Cerca o inizia una nuova chat" @keyup="onContactSearching()">
-          </div>
+        <div id="contacts-search" class="container position-rel">
+          <label for="search-bar" class="position-abs"><i class="fa-solid fa-magnifying-glass"></i></label>
+          <input id="search-bar" class="d-grow" v-model="searchBarInput" type="text" placeholder="Cerca o inizia una nuova chat" @keyup="onContactSearching()">
         </div>
 
         <!-- contacts list -->
         <div id="contacts-list">
 
-          <div v-for="(contact,index) in contacts" v-show="contact.visible" :class="selected == index ? 'selected':''" class="contact container d-flex" @click="clickOnContact(index)">
+          <div v-if="contacts.length" v-for="(contact,index) in contacts" v-show="contact.visible" :class="selected == index ? 'selected':''" class="contact container d-flex position-rel" @click="clickOnContact(index)">
             <img :src="contact.avatar" :alt="contact.name + ' avatar'">
             <div class="contact-text">
-              <div class="contact-name">{{contact.name}}</div>
+              <h3 class="contact-name">{{contact.name}}</h3>
               <div v-if="contact.messages.length" class="last-msg">{{getLastMsg(contact).message}}</div>
             </div>
-            <div v-if="contact.messages.length" class="msg-time">{{getMsgDate(getLastMsg(contact))}}</div>
+            <span v-if="contact.messages.length" class="msg-time position-abs">{{getMsgDate(getLastMsg(contact))}}</span>
           </div>
         </div>
       </aside>
@@ -66,32 +64,47 @@
       <div id="right-container">
 
         <!-- selected contact -->
-        <div id="selected-contact" class="container d-flex align-items-center">
+        <div v-if="contacts.length" id="selected-contact" class="container d-flex align-items-center">
           <img :src="contacts[selected].avatar" :alt="contacts[selected].name + ' avatar'">
-          <div>
-            <div class="contact-name">{{contacts[selected].name}}</div>
+          <div class="contact-text">
+            <h3 class="contact-name">{{contacts[selected].name}}</h3>
             <div class="contact-last-access"> {{contactLastAccess ? contactLastAccess : getLastAccessTime()}} </div>
           </div>
           
-          <div class="btns container">
+          <div class="btns container to-right">
             <button type="button" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
             <button type="button" class="btn"><i class="fa-solid fa-paperclip"></i></button>
-            <button type="button" class="btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+            <span class="contactOptionsMenu position-rel">
+              <button type="button" class="btn" @click.stop="toggleDropdown('contactOptionsMenu')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+              <div class="menu-wrapper position-abs">
+                <ul class="menu d-none" @mouseleave="toggleDropdown('contactOptionsMenu','close')">
+                  <li @click="clickOnDeleteAllMessages()"> Delete messages </li>
+                  <li @click="clickOnDeleteContact()"> Delete chat </li>
+                </ul>
+              </div>
+            </span>
           </div>
         </div>
 
         <!-- messages container -->
-        <div id="messages-container">
+        <div id="messages-container" :class="!contacts.length? 'full-heigth':''">
 
-          <div v-if="!contacts[selected].messages.length">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
-          <div v-else v-for="(msg,index) in contacts[selected].messages" class="msg-container d-flex flex-wrap">
-            <div v-if="printDateLine(msg,index)" id="date-line" class="text-center"><small>{{printDate(msg)}}</small> </div>
-            <div :class="msg.status == 'sent' ? 'sent':'received'" class="msg" @mouseenter="mouseenterOnMsg(index)" @mouseleave="resetSelectedMsg">
+          <!-- nessun contatto in lista -->
+          <div v-if="!contacts.length" class="text-center">Non hai nessun contatto con cui chattare, aggiungi qualcuno!</div>
+          <!-- nessun messaggio in messages -->
+          <div v-else-if="!contacts[selected].messages.length" class="text-center">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
+
+          <div v-else v-for="(msg,index) in contacts[selected].messages" class="msg-wrapper d-flex flex-wrap">
+            <!-- primo messaggio del giorno, stampo la data -->
+            <div v-if="printDateLine(msg,index)" class="date-line text-center">{{printDate(msg)}}</div>
+            
+            <div class="msg position-rel contains-menu-toggler" :class="msg.status"  @mouseleave="toggleDropdown('messageMenu','close',index)">
               <p>{{msg.message}}</p>
-              <div class="msg-time">{{getMsgTime(msg)}}</div>
-              <div v-if="selectedMsg == index" class="msgMenu">
-                <p class="text-end"><i class="fa-solid fa-chevron-down" @click="clickOnMsg()"></i></p>
-                <ul v-if="clickedMsg" class="menu-options">
+              <div class="msg-time position-abs">{{getMsgTime(msg)}}</div>
+              <!-- menu del messaggio -->
+              <div class="messageMenu menu-wrapper position-abs">
+                <p class="text-end menu-toggler d-none"><i class="fa-solid fa-chevron-down" @click="toggleDropdown('messageMenu','',index)"></i></p>
+                <ul class="menu d-none">
                   <li> Message info </li>
                   <li @click.stop="clickOnDeleteMsg(index)"> Delete message </li>
                 </ul>
@@ -102,13 +115,14 @@
         </div>
 
         <!-- chat inputs -->
-        <div id="chat-inputs" class="container d-flex align-items-center justify-content-center">
-          <i class="dark btn fa-regular fa-face-smile"></i>
-          <div class="input-group d-flex d-grow">
-            <input v-model="userMsg" id="msg-bar" class="d-grow" type="text" :placeholder="msgBarPlaceholder" @keyup.enter="sendMsg">
-          </div>
-          <i v-if="!userMsg" class="dark btn fa-solid fa-microphone"></i>
-          <i v-else class=" dark btn fa-solid fa-paper-plane" @click="sendMsg()"></i>
+        <div v-if="contacts.length" id="chat-inputs" class="container d-flex align-items-center justify-content-center">
+
+          <i class="dark btn text-center fa-regular fa-face-smile"></i>
+
+          <input v-model="userMsg" id="msg-bar" class="d-grow" type="text" :placeholder="msgBarPlaceholder" @keyup.enter="sendMsg">
+
+          <i v-if="!userMsg" class="dark btn text-center fa-solid fa-microphone"></i>
+          <i v-else class=" dark btn text-center fa-solid fa-paper-plane" @click="sendMsg()"></i>
         </div>
 
       </div>

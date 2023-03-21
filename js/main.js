@@ -3,16 +3,14 @@ const { createApp } = Vue
   createApp({
     data() {
       return {
+        user,
         contacts,
         randomReplies,
         selected: 0,
         contactLastAccess : '',
         userMsg : '',
-        userName: 'Sofia',
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
-        selectedMsg: -1,
-        clickedMsg: false,
         OPENAI_API_KEY : "",
       }
     },
@@ -23,6 +21,7 @@ const { createApp } = Vue
         this.resetMsgBarPlaceholder();
         this.contactLastAccess = '';
       },
+      // funzione che restituisce la data dell'ultimo accesso
       getLastAccessTime(){
         let index = this.contacts[this.selected].messages.length;
         if(index){
@@ -89,7 +88,7 @@ const { createApp } = Vue
         setTimeout(()=>{
           // stiamo inviando il primo messaggio del giorno, riceviamo prima un saluto 
           if (firstMsgOfTheDay){
-            replyMsg += this.randomReplies.greeting[this.randomNumber(0,2)]+' '+this.userName;
+            replyMsg += this.randomReplies.greeting[this.randomNumber(0,2)]+' '+this.user.name;
             reqTime ++;
           };
           // caso 1: abbiamo fatto una domanda, riceviamo una risposta randomica
@@ -137,17 +136,33 @@ const { createApp } = Vue
           this.contacts.forEach( contact => contact.visible = contact.name.match(new RegExp(`${this.searchBarInput}`,'i')))
         }
       },
-      // funzione che recupera l'indice del messaggio su cui si clicca rendendo visibile il menu
-      mouseenterOnMsg(index){
-        this.selectedMsg = index;
-      },
-      clickOnMsg(){
-        this.clickedMsg = !this.clickedMsg;
-      },
       // funzione che elimina il messaggio al click
       clickOnDeleteMsg(index){
         this.contacts[this.selected].messages.splice(index,1);
         this.resetSelectedMsg();
+      },
+      // funzione che mostra/nasconde un menu con classe "menuClass"
+      // i mouseleave avranno "action" = "close"
+      //menu su più elementi hanno un "index" per determinare quale dei menu venga aperto
+      toggleDropdown(menuClass,action,index){
+        !index ? index = 0 : '';
+        const menuArray = document.querySelectorAll(`.${menuClass} .menu`);
+        const menu = menuArray[index];
+        if(action == 'close'){
+          menu.classList.add('d-none')
+        } else {
+          menu.classList.toggle('d-none');
+        }
+      },
+      clickOnDeleteAllMessages(){
+        this.contacts[this.selected].messages = [];
+        this.toggleDropdown('contactOptionsMenu');
+      },
+      clickOnDeleteContact(){
+        this.contacts.splice(this.selected,1);
+        // gestione casi limite primo contatto o ultimo eliminato
+        this.selected == 0 ? '' : this.selected --;
+        this.toggleDropdown('contactOptionsMenu');
       },
       // funzione che fa scomparire il menu del messaggio
       resetSelectedMsg(){
@@ -176,9 +191,9 @@ const { createApp } = Vue
         let prevMsgDate = luxon.DateTime.fromFormat(prevMsg.date,'dd/MM/yyyy HH:mm:ss').toFormat('dd-MM-yyyy');
         return prevMsgDate != msgDate;
       },
-      // funzione che determina come sarà stampata la data di printDateLine
-      printDate(msg){
-        let date = luxon.DateTime.fromFormat(msg.date,'dd/MM/yyyy HH:mm:ss').toFormat('dd MMMM yyyy');
+      // funzione che stampa la data di un "message" in formato giorno/mese/anno
+      printDate(message){
+        let date = luxon.DateTime.fromFormat(message.date,'dd/MM/yyyy HH:mm:ss').toFormat('dd MMMM yyyy');
         return date;
       },
       randomNumber(min,max){
@@ -189,6 +204,7 @@ const { createApp } = Vue
         let that = this;
         var sQuestion = this.userMsg;
 
+        // stampo il messaggio che ho inviato a chat gpt
         this.contacts[this.selected].messages.push(
           { 
           date: luxon.DateTime.now().toFormat('d/MM/yyyy HH:mm:ss'),
@@ -198,6 +214,7 @@ const { createApp } = Vue
         );
         this.userMsg = '';
 
+        // se manca l'api key indico cosa fare all'user
         if (this.OPENAI_API_KEY == ''){
           this.contacts[this.selected].messages.push(
             { 

@@ -1,3 +1,7 @@
+const user = {
+  name : 'Sofia',
+  avatar : './img/avatar_io.jpg'
+}
 const contacts = [
   {
     name: 'Michele',
@@ -183,11 +187,11 @@ const randomReplies = {
     'assolutamente no'
   ],
   randomSentence: [
-    'frase 1',
-    'frase 2',
-    'frase 3',
-    'frase 4',
-    'frase 5'
+    '“ Quando dici: "Ho scritto un programma che manda in crash Windows", la gente ti guarda stupita e ti dice: "Hey, ce l\'ho nel sistema, *gratis*" ”. \n Linus Torvalds.',
+    '“Fare il debugging è doppiamente difficile rispetto a scrivere direttamente il codice. Quindi, se scrivi il codice nel miglior modo possibile, sei, per definizione, non abbastanza intelligente per fare il debug.” \n Brian Wilson Kernighan',
+    '“I bravi programmatori sanno cosa scrivere. I migliori sanno cosa riscrivere.” \n Eric Steven Raymond',
+    '“Dopo aver eseguito il download siete pregati di resettare il sistema premendo l\'apposito pulsante.” \n scritta nel bagno del dipartimento di matematica di Bologna',
+    '“Essere in due posti contemporaneamente una volta era una prerogativa dei santi, ora lo fanno anche gli informatici.” \n Piero Angela'
   ]
 
 };

@@ -19,13 +19,15 @@ html {
   --app-bg: #eaeaea;
   --notification-bg: #8edafc;
   --search-bg: #f9f9f9;
-  --input-group-bg: white;
+  --input-bg: white;
+  --contacts-list-bg: white;
   --contact-bg : white;
   --selected-contact-bg : #e9ebeb;
   --chat-inputs-bg : #f3eeea;
   --sent-msg-bg : #d5f9ba;
   --received-msg-bg : white;
-  --msgMenu-bg: white;
+  --menu-bg: white;
+  
   /* borders  */
   --app-border: #d5d5d4;
   --input-border-color: #e9ebeb;
@@ -37,7 +39,19 @@ html {
 }
 
 /* UTILITY */
-
+.position-rel {
+  position: relative;
+}
+.position-abs{
+  position: absolute;
+}
+.d-none {
+  display: none;
+}
+.d-inline-block {
+  display: inline-block;
+  vertical-align: middle;
+}
 .d-flex {
   display: flex;
 }
@@ -49,6 +63,9 @@ html {
 }
 .justify-content-center {
   justify-content: center;
+}
+.justify-content-between {
+  justify-content: space-between;
 }
 .d-grow {
   flex-grow: 1;
@@ -78,17 +95,48 @@ html {
 .container {
   padding: 0.5rem 1rem;
 }
+.to-right{
+  margin-left: auto;
+}
+
+/* dropdown */
+.menu-wrapper {
+  top: 0.5rem;
+  right: 0;
+  z-index: 9;
+}
+.menu-toggler {
+  padding: 0.5rem;
+}
+.contains-menu-toggler:hover .menu-toggler {
+  display: block;
+}
+.menu {
+  margin-right: 0.5rem;
+  list-style: none;
+  background-color: var(--menu-bg);
+  box-shadow: 0 0 2px 0 lightgray;
+  border-radius: 0.2rem;
+  overflow: hidden;
+}
+.menu li{
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+}
+.menu li:hover {
+  background-color: var(--selected-contact-bg);
+}
+/* /dropdown */
 
 /* STYLE  */
-
 
 body {
   background: linear-gradient( to bottom, var(--body-top-bg) 20%, var(--body-bg) 20% 100%) ;
 }
 
 #app-container {
-  min-width: 800px;
-  width: 80vw;
+  min-width: 750px;
+  width: 80%;
   height: calc(100vh - 4rem);
   margin: 2rem auto;
   background-color: var(--app-bg);
@@ -99,29 +147,27 @@ body {
   width: 40%;
   height: 100%;
   border-right: solid 1px var(--app-border);
-  overflow: hidden;
 }
-
 #right-container {
   width: 60%;
   height: 100%;
 }
 
-#user-container img, #selected-contact img{
-  object-fit: contain;
-  height: 50px;
+/* user & selected contact */
+#user, #selected-contact {
+  height: 70px;
+}
+#user img, #selected-contact img{
+  object-fit: cover;
+  height: 80%;
   border-radius: 50%;
-  margin-right: 0.5rem;
-  margin-left: -0.5rem;
+  margin-right: 1rem;
 }
 
-.btns.container {
-  margin-left: auto;
-}
-
+/* notification */
 #notification.container {
-  padding: 1rem;
   background-color: var(--notification-bg);
+  height: 70px;
 }
 #notification-bell {
   width: 50px;
@@ -129,104 +175,108 @@ body {
   border-radius: 50%;
   text-align: center;
   line-height: 50px;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   color: var(--notification-bg);
   background-color: white; 
 }
 #notification a {
   color: var(--btn-dark-color);
 }
+
+/* search bar */
 #contacts-search.container {
   background-color: var(--search-bg);
-  padding: 0.5rem;
+  height: 50px;
 }
-.input-group {
-  border: solid 1px var(--input-border-color);
-  border-radius: 0.2rem;
-  overflow: hidden;
-}
-.input-group label {
-  padding: 0.5rem 1.5rem;
-  text-align: center;
+#contacts-search label {
+  top: 1.5rem;
+  left: 2rem;
   color: var(--btn-color);
-  border-right: solid 1px var(--input-border-color);
-  background-color: var(--input-group-bg);
+  transform: translateY(-50%);
 }
-.input-group input {
-  padding: 0.5rem 1rem;
+#contacts-search input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
   border: none;
-  background-color: var(--input-group-bg);
-  outline: none;
+  background-color: var(--input-bg);
+  border-radius: 0.3rem;
+}
+#contacts-search input:focus {
+  outline: 2px solid var(--app-border);
 }
 
+/* contacts list */
 #contacts-list {
   overflow-y: scroll;
-  background-color: white;
-  height: calc(100% - 200px);
+  background-color: var(--contacts-list-bg);
+  height: calc(100% - 190px);
 }
-#contacts-list .contact {
-  position: relative;
-  background-color: var(--contact-bg);
+
+.contact:not(:last-of-type) {
+  border-bottom: 1px solid var(--selected-contact-bg);
 }
-#contacts-list .selected.contact {
+.selected.contact {
   background-color: var(--selected-contact-bg) ;
 }
-#contacts-list .contact img {
-  object-fit: contain;
+.contact img {
+  object-fit: cover;
   height: 50px;
   border-radius: 50%;
   margin: 0 1rem 0 0.5rem;
 }
-#contacts-list .contact-text {
+.contact-text {
   max-width: calc(100% - 100px);
+  line-height: 1.5rem;
+  margin-top: 0.25rem;
 }
-#contacts-list .contact-name {
-  font-size: 1.2rem;
-}
-#contacts-list .last-msg {
+.contact .last-msg {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 0.9rem;
-  line-height: 1.4rem;
   color: var(--text-gray);
 }
 #contacts-list .msg-time {
-  position: absolute;
   top: 0.5rem;
   right: 0.5rem;
 }
+
 .msg-time {
   text-align: end;
   font-size: 0.7rem;
-  margin-left: auto;
   color: var(--text-gray);
 }
 
+/* selected contact */
 .contact-last-access {
   color: var(--text-gray);
   font-size: 0.8rem;
-  margin-top: 0.2rem;
+  
 }
+
+/* messages container */
 #messages-container {
-  height: calc(100% - 116px);
-  padding: 2.5rem 4rem;
+  height: calc(100% - 120px);
+  padding: 1.5rem 3rem;
   overflow-y: scroll;
   background: repeat url(../img/mine.jpg);
 }
-#messages-container .msg-container {
+#messages-container.full-heigth {
+  height: 100%;
+}
+#messages-container .msg-wrapper {
   margin-bottom: 0.5rem;
 }
-#date-line {
+.date-line {
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 1rem 0;
+  font-size: 0.8rem
 }
 .msg {
-  position: relative;
   min-width: 40%;
   max-width: 80%;
   border-radius: 0.8rem;
-  padding: 1rem 1.5rem 0.2rem ;
+  padding: 1rem 2rem 1.5rem 1.5rem;
   box-shadow: 0px 5px 5px 0 gray;
   font-size: 0.9rem;
 }
@@ -234,38 +284,29 @@ body {
   margin-left: auto;
   background-color: var(--sent-msg-bg);
 }
-.msgMenu {
-  min-width: 80%;
-  position: absolute;
-  right: 0.3rem;
-  top: 40%;
-  z-index: 9;
-}
-.msgMenu ul{
-  list-style: none;
-  background-color: var(--msgMenu-bg);
-  box-shadow: 0 0 2px 0 lightgray;
-  border-radius: 0.2rem;
-  overflow: hidden;
-}
-.msgMenu li{
-  padding: 0.5rem 1rem;
-}
-.msgMenu li:hover {
-  background-color: var(--selected-contact-bg);
-}
 .received.msg {
   margin-right: auto;
   background-color: var(--received-msg-bg) ;
 }
 #messages-container .msg-time {
-  margin-right: -0.5rem;
-  margin-top: 0.5rem;
+  bottom: 0.2rem;
+  right: 0.5rem;
 }
 
+/* chat inputs */
 #chat-inputs {
+  height: 50px;
   background-color: var(--chat-inputs-bg) ;
 }
+#msg-bar {
+  height: 100%;
+  padding: 0.2rem 1rem;
+  border: 1px solid var(--input-border-color);
+  border-radius: 0.3rem;
+}
+#msg-bar:focus{
+  outline: 2px solid var(--app-border);
+}
 #chat-inputs .btn {
-  margin: 0 2rem;
+  width: 10%
 }
