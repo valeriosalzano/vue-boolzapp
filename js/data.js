@@ -1,5 +1,5 @@
 const user = {
-  name : 'Sofia',
+  name : 'Valerio',
   avatar : './img/avatar_io.jpg'
 }
 const contacts = [
@@ -176,7 +176,7 @@ const randomReplies = {
 
   greeting: [
     'Ciao',
-    'Ehy',
+    'Hey',
     'Salve',
   ],
   answer: [

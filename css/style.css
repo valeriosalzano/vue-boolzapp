@@ -165,8 +165,12 @@ body {
 }
 .newContactMenu input {
   padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
+  border: 1px solid var(--input-border-color);
 }
-
+.newContactMenu input:focus {
+  outline: 2px solid var(--app-border);
+}
 /* notification */
 #notification.container {
   background-color: var(--notification-bg);

@@ -97,7 +97,8 @@ const { createApp } = Vue
           reqTime ++;
         } else {
           // caso 2: frase randomica
-          replyMsg == '' ? '' : replyMsg+= ', ';
+          replyMsg == '' ? '' : replyMsg+= '. ';
+          replyMsg += 'Senti questa: '
           replyMsg += this.randomReplies.randomSentence[this.randomNumber(0,4)]
           reqTime += 3;
         }
