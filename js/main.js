@@ -6,12 +6,11 @@ const { createApp } = Vue
         user,
         contacts,
         randomReplies,
-        selected: 0,
+        selected:-1,
         userMsg : '',
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
         OPENAI_API_KEY : "",
-        screenWidth : window.screen.availWidth,
       }
     },
     methods: {

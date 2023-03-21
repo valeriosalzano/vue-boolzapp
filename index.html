@@ -82,7 +82,7 @@
       <div id="right-container" class="mobile-d-none">
 
         <!-- selected contact -->
-        <div v-if="contacts.length" id="selected-contact" class="container d-flex align-items-center">
+        <div v-if="contacts.length && selected != -1" id="selected-contact" class="container d-flex align-items-center">
           <i class="dark btn fa-solid fa-arrow-left mobile-show" id="contact-arrow" @click="changePanel"></i>
           <img :src="contacts[selected].avatar" :alt="contacts[selected].name + ' avatar'">
           <div class="contact-text">
@@ -106,12 +106,14 @@
         </div>
 
         <!-- messages container -->
-        <div id="messages-container" :class="!contacts.length? 'full-heigth':''">
+        <div id="messages-container" :class="(!contacts.length || selected == -1)? 'full-heigth':''">
 
           <!-- nessun contatto in lista -->
-          <div v-if="!contacts.length" class="text-center">Non hai nessun contatto con cui chattare, aggiungi qualcuno!</div>
+          <div v-if="!contacts.length" class="text-center alert">Non hai nessun contatto con cui chattare, aggiungi qualcuno!</div>
+          <!-- schermata di apertura -->
+          <div v-else-if="selected == -1" class="text-center alert"> Seleziona un contatto per cominciare.</div>
           <!-- nessun messaggio in messages -->
-          <div v-else-if="!contacts[selected].messages.length" class="text-center">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
+          <div v-else-if="!contacts[selected].messages.length" class="text-center alert">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
 
           <div v-else v-for="(msg,index) in contacts[selected].messages" class="msg-wrapper d-flex flex-wrap">
             <!-- primo messaggio del giorno, stampo la data -->
@@ -134,7 +136,7 @@
         </div>
 
         <!-- chat inputs -->
-        <div v-if="contacts.length" id="chat-inputs" class="container d-flex align-items-center justify-content-center">
+        <div v-if="contacts.length && selected != -1 " id="chat-inputs" class="container d-flex align-items-center justify-content-center">
 
           <i class=" spaced dark btn text-center fa-regular fa-face-smile"></i>
 
