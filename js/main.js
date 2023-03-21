@@ -7,7 +7,6 @@ const { createApp } = Vue
         contacts,
         randomReplies,
         selected: 0,
-        contactLastAccess : '',
         userMsg : '',
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
@@ -19,26 +18,26 @@ const { createApp } = Vue
       clickOnContact(index){
         this.selected = index;
         this.resetMsgBarPlaceholder();
-        this.contactLastAccess = '';
       },
       // funzione che restituisce la data dell'ultimo accesso
-      getLastAccessTime(){
+      setLastAccessTime(){
         let index = this.contacts[this.selected].messages.length;
-        if(index){
+        if (index){
           let message;
           do {
             index --;
-            message = this.contacts[this.selected].messages[index];
-          } while (message.status == 'sent' && index > 0)
+            let msg = this.contacts[this.selected].messages[index];
+            msg.status == 'received' ? message = msg : ''
+          } while ( index > 0)
 
-          if (index != -1 && message.status != 'sent'){
+          if (message){
             let newDate = luxon.DateTime.fromFormat(message.date,'dd/MM/yyyy HH:mm:ss');
-            this.contactLastAccess = `Ultimo accesso ${newDate.toRelativeCalendar()} alle ${newDate.toFormat('HH:mm')}`;
+            this.contacts[this.selected].lastAccess= `Ultimo accesso ${newDate.toRelativeCalendar()} alle ${newDate.toFormat('HH:mm')}`;
           } else {
-            this.contactLastAccess = 'Ultimo accesso molto tempo fa.'
+            this.contacts[this.selected].lastAccess = 'Ultimo accesso molto tempo fa'
           }
         } else {
-          this.contactLastAccess = 'Ultimo accesso molto tempo fa.'
+          this.contactLastAccess = 'Offline'
         }
       },
       // funzione che restituisce l'ultimo messaggio scambiato con un contatto
@@ -77,32 +76,33 @@ const { createApp } = Vue
         // salvo il selected in una variabile per evitare che il timeout stampi su un contatto diverso
         let selected = this.selected;
 
-        this.contactLastAccess = `${this.contacts[selected].name} sta scrivendo...`;
+        this.contacts[selected].lastAccess = `${this.contacts[selected].name} sta scrivendo...`;
         this.msgBarPlaceholder = `${this.contacts[selected].name} sta scrivendo...`;
         
         let firstMsgOfTheDay = this.printDateLine(this.contacts[selected].messages[this.contacts[selected].messages.length-1],this.contacts[selected].messages.length-1);
         let isQuestion = this.userMsg.match(/\?$/mg);
         let replyMsg = '';
+        // tempo di risposta variabile
         let reqTime = 1;
 
-        setTimeout(()=>{
-          // stiamo inviando il primo messaggio del giorno, riceviamo prima un saluto 
-          if (firstMsgOfTheDay){
-            replyMsg += this.randomReplies.greeting[this.randomNumber(0,2)]+' '+this.user.name;
-            reqTime ++;
-          };
-          // caso 1: abbiamo fatto una domanda, riceviamo una risposta randomica
-          if (isQuestion){
-            replyMsg == '' ? '' : replyMsg+= ', ';
-            replyMsg += this.randomReplies.answer[this.randomNumber(0,4)];
-            reqTime ++;
-          } else {
-            // caso 2: frase randomica
-            replyMsg == '' ? '' : replyMsg+= ', ';
-            replyMsg += this.randomReplies.randomSentence[this.randomNumber(0,4)]
-            reqTime += 2;
-          }
+        // stiamo inviando il primo messaggio del giorno, riceviamo prima un saluto 
+        if (firstMsgOfTheDay){
+          replyMsg += this.randomReplies.greeting[this.randomNumber(0,2)]+' '+this.user.name;
+          reqTime ++;
+        };
+        // caso 1: abbiamo fatto una domanda ("?" alla fine), riceviamo una risposta randomica
+        if (isQuestion){
+          replyMsg == '' ? '' : replyMsg+= ', ';
+          replyMsg += this.randomReplies.answer[this.randomNumber(0,4)];
+          reqTime ++;
+        } else {
+          // caso 2: frase randomica
+          replyMsg == '' ? '' : replyMsg+= ', ';
+          replyMsg += this.randomReplies.randomSentence[this.randomNumber(0,4)]
+          reqTime += 3;
+        }
 
+        setTimeout(()=>{
           // la risposta viene stampata nello storico
           this.contacts[selected].messages.push(
             { 
@@ -115,14 +115,14 @@ const { createApp } = Vue
           // scorriamo al messaggio ricevuto
           this.goToLastMsg(200)
 
-          // resettiamo il "sta scrivendo..." dopo aver ricevuto risposta
+          // resettiamo il "sta scrivendo..." dopo aver ricevuto risposta e "online" per 2 secondi
           this.msgBarPlaceholder = 'Scrivi un messaggio';
-          this.contactLastAccess = 'online'
+          this.contacts[this.selected].lastAccess = 'online'
 
           // dopo 2 secondi il contatto non sarà più online
           setTimeout(()=>{
             let newDate = luxon.DateTime.now();
-            this.contactLastAccess = `Ultimo accesso ${newDate.toRelativeCalendar()} alle ${newDate.toFormat('HH:mm')}`;
+            this.contacts[selected].lastAccess = `Ultimo accesso ${newDate.toRelativeCalendar()} alle ${newDate.toFormat('HH:mm')}`;
           },2000)
         },1000*this.randomNumber(1,reqTime));
       },
@@ -139,11 +139,12 @@ const { createApp } = Vue
       // funzione che elimina il messaggio al click
       clickOnDeleteMsg(index){
         this.contacts[this.selected].messages.splice(index,1);
-        this.resetSelectedMsg();
       },
-      // funzione che mostra/nasconde un menu con classe "menuClass"
-      // i mouseleave avranno "action" = "close"
-      //menu su più elementi hanno un "index" per determinare quale dei menu venga aperto
+      /* 
+        funzione che mostra/nasconde un menu con classe "menuClass"
+        i mouseleave avranno "action" = "close"
+        menu su più elementi hanno un "index" per determinare quale dei menu verrà aperto
+      */
       toggleDropdown(menuClass,action,index){
         !index ? index = 0 : '';
         const menuArray = document.querySelectorAll(`.${menuClass} .menu`);
@@ -154,22 +155,38 @@ const { createApp } = Vue
           menu.classList.toggle('d-none');
         }
       },
+      // funzione che al click cancella tutti i messaggi scambiati con il contatto
       clickOnDeleteAllMessages(){
         this.contacts[this.selected].messages = [];
         this.toggleDropdown('contactOptionsMenu');
       },
+      // funzione che al click cancella i dati della chat e del contatto
       clickOnDeleteContact(){
         this.contacts.splice(this.selected,1);
         // gestione casi limite primo contatto o ultimo eliminato
         this.selected == 0 ? '' : this.selected --;
         this.toggleDropdown('contactOptionsMenu');
       },
-      // funzione che fa scomparire il menu del messaggio
-      resetSelectedMsg(){
-        this.selectedMsg = -1;
-        this.clickedMsg = false;
+      // funzione che gestisce l'inserimento di un nuovo contatto
+      clickOnAddContact(){
+        const name = document.getElementById('newContactName');
+        const link = document.getElementById('newContactLink');
+        if (name.value.trim()){
+          let avatar = link.value.trim()? link.value : './img/unknown.png';
+          this.contacts.push(
+            {
+              name: name.value,
+              avatar,
+              visible: true,
+              messages: []
+            }
+          )
+          name.value = '';
+          link.value = '';
+          this.toggleDropdown('newContactMenu')
+        }
       },
-      // funzione che resetta 
+      // funzione che resetta il placeholder per la #msg-bar
       resetMsgBarPlaceholder(){
         this.msgBarPlaceholder = 'Scrivi un messaggio';
       },
@@ -193,9 +210,10 @@ const { createApp } = Vue
       },
       // funzione che stampa la data di un "message" in formato giorno/mese/anno
       printDate(message){
-        let date = luxon.DateTime.fromFormat(message.date,'dd/MM/yyyy HH:mm:ss').toFormat('dd MMMM yyyy');
+        let date = luxon.DateTime.fromFormat(message.date,'dd/MM/yyyy HH:mm:ss').setLocale('it').toFormat('dd MMMM yyyy');
         return date;
       },
+      // funzione che restituisce un numero randomico compreso tra min e max
       randomNumber(min,max){
         return Math.floor(Math.random()*(max - min +1)+min);
       },
@@ -229,57 +247,56 @@ const { createApp } = Vue
         // variabile d'appogggio per testo AI
         let txtOutput = '';
 
-        var oHttp = new XMLHttpRequest();
+        let oHttp = new XMLHttpRequest();
         oHttp.open("POST", "https://api.openai.com/v1/completions");
         oHttp.setRequestHeader("Accept", "application/json");
         oHttp.setRequestHeader("Content-Type", "application/json");
         oHttp.setRequestHeader("Authorization", "Bearer " + this.OPENAI_API_KEY);
     
         oHttp.onreadystatechange = function () {
-            if (oHttp.readyState === 4) {
-                //console.log(oHttp.status);
-                var oJson = {}
-                if (txtOutput != "") txtOutput += "\n";
-    
-                try {
-                    oJson = JSON.parse(oHttp.responseText);
-                } catch (ex) {
-                    txtOutput += "Error: " + ex.message
-                }
-    
-                if (oJson.error && oJson.error.message) {
-                    txtOutput += "Error: " + oJson.error.message;
-                } else if (oJson.choices && oJson.choices[0].text) {
-                    var s = oJson.choices[0].text;
-    
-                    if (/*selLang.value != "en-US"*/true) {
-                        var a = s.split("?\n");
-                        if (a.length == 2) {
-                            s = a[1];
-                        }
-                    }
-    
-                    if (s == "") s = "No response";
-                    txtOutput += s;
+          if (oHttp.readyState === 4) {
+              //console.log(oHttp.status);
+              let oJson = {}
+              if (txtOutput != "") txtOutput += "\n";
+  
+              try {
+                  oJson = JSON.parse(oHttp.responseText);
+              } catch (ex) {
+                  txtOutput += "Error: " + ex.message
+              }
+  
+              if (oJson.error && oJson.error.message) {
+                  txtOutput += "Error: " + oJson.error.message;
+              } else if (oJson.choices && oJson.choices[0].text) {
+                  let s = oJson.choices[0].text;
+                  let a = s.split("?\n");
+                  
+                  if (a.length == 2) {
+                      s = a[1];
+                  }
 
-                    // stampiamo quel che ha detto GPT
-                    that.contacts[that.selected].messages.push(
-                      { 
-                      date: luxon.DateTime.now().toFormat('d/MM/yyyy HH:mm:ss'),
-                      message: txtOutput,
-                      status: 'received'
-                      }
-                    );
+                  if (s == "") s = "No response";
+                  
+                  txtOutput += s;
+
+                  // stampiamo quel che ha detto GPT
+                  that.contacts[that.selected].messages.push(
+                    { 
+                    date: luxon.DateTime.now().toFormat('d/MM/yyyy HH:mm:ss'),
+                    message: txtOutput,
+                    status: 'received'
+                    }
+                  );
                 }            
-            }
+          }
         };
     
-        var sModel = 'text-davinci-003';// "text-davinci-003";
-        var iMaxTokens = 2048;
-        var sUserId = "1";
-        var dTemperature = 0.5;    
+        let sModel = 'text-davinci-003';// "text-davinci-003";
+        let iMaxTokens = 2048;
+        let sUserId = "1";
+        let dTemperature = 0.5;    
     
-        var data = {
+        let data = {
             model: sModel,
             prompt: sQuestion,
             max_tokens: iMaxTokens,

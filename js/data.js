@@ -187,7 +187,7 @@ const randomReplies = {
     'assolutamente no'
   ],
   randomSentence: [
-    '“ Quando dici: "Ho scritto un programma che manda in crash Windows", la gente ti guarda stupita e ti dice: "Hey, ce l\'ho nel sistema, *gratis*" ”. \n Linus Torvalds.',
+    '“ Quando dici: << Ho scritto un programma che manda in crash Windows>>, la gente ti guarda stupita e ti dice: <<Hey, ce l\'ho nel sistema, *gratis* >> ”. \n Linus Torvalds.',
     '“Fare il debugging è doppiamente difficile rispetto a scrivere direttamente il codice. Quindi, se scrivi il codice nel miglior modo possibile, sei, per definizione, non abbastanza intelligente per fare il debug.” \n Brian Wilson Kernighan',
     '“I bravi programmatori sanno cosa scrivere. I migliori sanno cosa riscrivere.” \n Eric Steven Raymond',
     '“Dopo aver eseguito il download siete pregati di resettare il sistema premendo l\'apposito pulsante.” \n scritta nel bagno del dipartimento di matematica di Bologna',
