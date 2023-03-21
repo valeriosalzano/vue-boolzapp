@@ -180,6 +180,12 @@ const { createApp } = Vue
         // gestione casi limite primo contatto o ultimo eliminato
         this.selected == 0 ? '' : this.selected --;
         this.toggleDropdown('contactOptionsMenu');
+
+        // extra controlli per mobile
+        let screenWidth = window.screen.availWidth;
+        if(screenWidth < 750){
+          this.changePanel()
+        }
       },
       // funzione che gestisce l'inserimento di un nuovo contatto
       clickOnAddContact(){
