@@ -66,7 +66,7 @@
         <!-- contacts list -->
         <div id="contacts-list">
 
-          <div v-if="contacts.length" v-for="(contact,index) in contacts" v-show="contact.visible" :class="selected == index ? 'selected':''" class="contact container d-flex position-rel" @click="clickOnContact(index)">
+          <div v-if="contacts.length" v-for="(contact,index) in contacts" v-show="contact.visible" :class="selected == index ? 'selected':''" class="contact container d-flex position-rel" @click.stop="clickOnContact(index)">
             <img :src="contact.avatar" :alt="contact.name + ' avatar'">
             <div class="contact-text">
               <h3 class="contact-name">{{contact.name}}</h3>
@@ -79,10 +79,11 @@
       <!-- /LEFT PANEL -->
 
       <!-- RIGHT PANEL -->
-      <div id="right-container">
+      <div id="right-container" class="mobile-d-none">
 
         <!-- selected contact -->
         <div v-if="contacts.length" id="selected-contact" class="container d-flex align-items-center">
+          <i class="dark btn fa-solid fa-arrow-left mobile-show" id="contact-arrow" @click="changePanel"></i>
           <img :src="contacts[selected].avatar" :alt="contacts[selected].name + ' avatar'">
           <div class="contact-text">
             <h3 class="contact-name">{{contacts[selected].name}}</h3>
@@ -135,12 +136,12 @@
         <!-- chat inputs -->
         <div v-if="contacts.length" id="chat-inputs" class="container d-flex align-items-center justify-content-center">
 
-          <i class="dark btn text-center fa-regular fa-face-smile"></i>
+          <i class=" spaced dark btn text-center fa-regular fa-face-smile"></i>
 
           <input v-model="userMsg" id="msg-bar" class="d-grow" type="text" :placeholder="msgBarPlaceholder" @keyup.enter="sendMsg">
 
-          <i v-if="!userMsg" class="dark btn text-center fa-solid fa-microphone"></i>
-          <i v-else class=" dark btn text-center fa-solid fa-paper-plane" @click="sendMsg()"></i>
+          <i v-if="!userMsg" class="spaced dark btn text-center fa-solid fa-microphone"></i>
+          <i v-else class="spaced dark btn text-center fa-solid fa-paper-plane" @click="sendMsg()"></i>
         </div>
 
       </div>

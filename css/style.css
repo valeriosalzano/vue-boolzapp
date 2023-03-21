@@ -260,6 +260,9 @@ body {
   font-size: 0.8rem;
   
 }
+#contact-arrow {
+  margin: 0 0.2rem;
+}
 
 /* messages container */
 #messages-container {
@@ -314,6 +317,53 @@ body {
 #msg-bar:focus{
   outline: 2px solid var(--app-border);
 }
-#chat-inputs .btn {
+#chat-inputs .spaced {
   width: 10%
+}
+
+.mobile-show {
+  display: none;
+}
+
+@media screen and (max-width: 750px) {
+  #app-container {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    min-width: unset;
+  }
+
+  #left-container {
+    width: 100%;
+  }
+  #right-container{
+    width: 100%;
+  }
+  .mobile-d-none {
+    display: none;
+  }
+  .mobile-show {
+    display: inline-block;
+  }
+  i {
+    font-size: 0.8rem;
+  }
+  .btns {
+    padding: 0.2rem;
+    min-width: 100px;
+  }
+  .btn {
+    margin: 0.3rem;
+  }
+  .contact-text {
+    width: calc(100% - 200px);
+  }
+  .contact-last-access {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .container {
+    padding: 0.5rem
+  }
 }

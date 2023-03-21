@@ -11,6 +11,7 @@ const { createApp } = Vue
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
         OPENAI_API_KEY : "",
+        screenWidth : window.screen.availWidth,
       }
     },
     methods: {
@@ -18,6 +19,19 @@ const { createApp } = Vue
       clickOnContact(index){
         this.selected = index;
         this.resetMsgBarPlaceholder();
+
+        // extra controlli per mobile
+        let screenWidth = window.screen.availWidth;
+        if(screenWidth < 750){
+          this.changePanel()
+        }
+      },
+      changePanel(){
+        const left = document.getElementById('left-container');
+        const right = document.getElementById('right-container');
+
+        left.classList.toggle('mobile-d-none');
+        right.classList.toggle('mobile-d-none');
       },
       // funzione che restituisce la data dell'ultimo accesso
       setLastAccessTime(){
