@@ -14,6 +14,8 @@
 
 <body>
 
+  <div id="splash-page"><i class="fa-brands fa-whatsapp"></i> </div>
+  
   <div id="app" v-cloak>
     <div id="app-container" class="d-flex">
       <!-- LEFT PANEL -->
@@ -106,14 +108,14 @@
         </div>
 
         <!-- messages container -->
-        <div id="messages-container" :class="(!contacts.length || selected == -1)? 'full-heigth':''">
+        <div id="messages-container" :class="(!contacts.length || selected == -1)? 'full-heigth':''" class="position-rel">
 
           <!-- nessun contatto in lista -->
-          <div v-if="!contacts.length" class="text-center alert">Non hai nessun contatto con cui chattare, aggiungi qualcuno!</div>
+          <div v-if="!contacts.length" class="text-center alert"><i class="fa-brands fa-whatsapp"></i><br> Non hai nessun contatto con cui chattare, aggiungi qualcuno!</div>
           <!-- schermata di apertura -->
-          <div v-else-if="selected == -1" class="text-center alert"> Seleziona un contatto per cominciare.</div>
+          <div v-else-if="selected == -1" class="text-center alert"><i class="fa-brands fa-whatsapp"></i> <br> Seleziona un contatto per cominciare.</div>
           <!-- nessun messaggio in messages -->
-          <div v-else-if="!contacts[selected].messages.length" class="text-center alert">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
+          <div v-else-if="!contacts[selected].messages.length" class="text-center">Scrivi qualcosa a {{contacts[selected].name}} per cominciare.</div>
 
           <div v-else v-for="(msg,index) in contacts[selected].messages" class="msg-wrapper d-flex flex-wrap">
             <!-- primo messaggio del giorno, stampo la data -->
@@ -127,7 +129,7 @@
                 <p class="text-end menu-toggler d-none"><i class="fa-solid fa-chevron-down" @click="toggleDropdown('messageMenu','',index)"></i></p>
                 <ul class="menu d-none">
                   <li> Message info </li>
-                  <li @click.stop="clickOnDeleteMsg(index)"> Delete message </li>
+                  <li @click="clickOnDeleteMsg(index)"> Delete message </li>
                 </ul>
               </div>
             </div>

@@ -11,17 +11,26 @@ const { createApp } = Vue
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
         OPENAI_API_KEY : "",
+        screenWidth : window.screen.availWidth
       }
     },
+    mounted(){
+      this.hideSplashPage();
+    },
+
     methods: {
+      hideSplashPage(){
+        const splashPage = document.getElementById('splash-page');
+        setTimeout(()=> splashPage.classList.add('d-none'), 1000);
+      },
       // al click dell'utente cambia il contatto mostrato
       clickOnContact(index){
         this.selected = index;
         this.resetMsgBarPlaceholder();
 
         // extra controlli per mobile
-        let screenWidth = window.screen.availWidth;
-        if(screenWidth < 750){
+        this.screenWidth = window.screen.availWidth;
+        if(this.screenWidth < 750){
           this.changePanel()
         }
       },
@@ -153,6 +162,7 @@ const { createApp } = Vue
       // funzione che elimina il messaggio al click
       clickOnDeleteMsg(index){
         this.contacts[this.selected].messages.splice(index,1);
+        this.toggleDropdown('messageMenu','close',index);
       },
       /* 
         funzione che mostra/nasconde un menu con classe "menuClass"

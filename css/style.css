@@ -325,9 +325,36 @@ body {
 }
 
 .alert {
-  margin: 2.5rem auto;
-  font-size: 1.5rem;
-  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 30vh 2rem;
+  font-size: 2rem;
+  color: var(--body-top-bg);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.alert i {
+  font-size: 10rem;
+  margin-bottom: 2rem;
+}
+
+#splash-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  padding: 20vh 0;
+  font-size: 50vh;
+  color: var(--body-top-bg);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 1);
+  background-color: darkslategray;
+  z-index: 999;
+  border: 5px solid black;
 }
 
 @media screen and (max-width: 1000px){
@@ -355,14 +382,12 @@ body {
   .mobile-show {
     display: inline-block;
   }
-  i {
-    font-size: 0.8rem;
-  }
   .btns {
     padding: 0.2rem;
     min-width: 100px;
   }
   .btn {
+    font-size: 0.8rem;
     margin: 0.3rem;
   }
   .contact-text {
