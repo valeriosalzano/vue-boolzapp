@@ -12,11 +12,13 @@ html {
   font-family: sans-serif;
 }
 
+/* automatic/manual light mode */
 :root {
   /* backgrounds */
   --body-bg : #dbdbdb;
   --body-top-bg: #009688;
   --app-bg: #eaeaea;
+  --notification-bell-bg: white;
   --notification-bg: #8edafc;
   --search-bg: #f9f9f9;
   --input-bg: white;
@@ -27,15 +29,50 @@ html {
   --sent-msg-bg : #d5f9ba;
   --received-msg-bg : white;
   --menu-bg: white;
+  --alert-bg: rgba(255, 255, 255, 0.2);
   
   /* borders  */
   --app-border: #d5d5d4;
   --input-border-color: #e9ebeb;
+  --box-shadow: lightgray;
   /* btn */
   --btn-color: #b1b1b1;
-  --btn-dark-color: #6b7376;
+  --btn-darker-color: #6b7376;
   /* text */
   --text-gray : #b1b1b1;
+  --notification-bell: #8edafc;
+  --text-black: black;
+  --alert-text-shadow: rgba(0,0,0,1);
+}
+
+/* automatic dark mode */
+:root .dark {
+  /* backgrounds */
+  --body-bg: #2d2d2d;
+  --app-bg: #000;
+  --search-bg: #848484;
+  --input-bg: black;
+  --contacts-list-bg: #000;
+  --contact-bg: #000;
+  --selected-contact-bg: #8a8a8a;
+  --chat-inputs-bg: #4d4d4d;
+  --sent-msg-bg: #d5f9ba;
+  --received-msg-bg: white;
+  --menu-bg: rgb(0, 0, 0);
+  --alert-bg: rgba(0,0,0,0.8);
+  --notification-bell-bg: black;
+
+  /* borders  */
+  --app-border: #717171;
+  --input-border-color: #c8c8c8;
+  --box-shadow: lightgray;
+  /* btn */
+  --btn-color: #b3b3b3;
+  --btn-darker-color: #fff;
+  /* text */
+  --text-gray: #d5d5d5;
+  --text-black: rgb(255, 255, 255);
+  --alert-text-shadow: rgb(190, 190, 190);
 }
 
 /* UTILITY */
@@ -88,12 +125,12 @@ button {
   font-size: 1.5rem;
   vertical-align: middle;
 }
-.dark.btn {
-  color: var(--btn-dark-color);
+.darker.btn {
+  color: var(--btn-darker-color);
 }
 .btn:hover {
   background-color: transparent;
-  color: var(--btn-dark-color);
+  color: var(--btn-darker-color);
 }
 .container {
   padding: 0.5rem 1rem;
@@ -104,10 +141,12 @@ button {
 
 /* dropdown */
 .menu-wrapper {
+  color: var(--text-black);
   top: 0.5rem;
   right: 0;
   z-index: 9;
 }
+
 .dropup.menu-wrapper {
   top: unset;
   right: unset;
@@ -124,7 +163,7 @@ button {
   margin-right: 0.5rem;
   list-style: none;
   background-color: var(--menu-bg);
-  box-shadow: 0 0 2px 0 lightgray;
+  box-shadow: 0 0 2px 0 var(--box-shadow);
   border-radius: 0.2rem;
   overflow: hidden;
 }
@@ -142,13 +181,22 @@ button {
 body {
   background: linear-gradient( to bottom, var(--body-top-bg) 20%, var(--body-bg) 20% 100%) ;
 }
+h3, input {
+  color: var(--text-black);
+}
+input {
+  background-color: var(--input-bg);
+}
+::placeholder {
+  color: var(--text-gray);
+}
 
 #app-container {
   width: 80%;
   height: calc(100vh - 4rem);
   margin: 2rem auto;
   background-color: var(--app-bg);
-  box-shadow: 0 0 3px 0 lightgray;
+  box-shadow: 0 0 3px 0 var(--box-shadow);
 }
 
 #left-container {
@@ -191,11 +239,11 @@ body {
   text-align: center;
   line-height: 50px;
   font-size: 1.5rem;
-  color: var(--notification-bg);
-  background-color: white; 
+  color: var(--notification-bell);
+  background-color: var(--notification-bell-bg); 
 }
 #notification a {
-  color: var(--btn-dark-color);
+  color: var(--btn-darker-color);
 }
 
 /* search bar */
@@ -295,7 +343,7 @@ body {
   max-width: 80%;
   border-radius: 0.8rem;
   padding: 1rem 2rem 1.5rem 1.5rem;
-  box-shadow: 0px 5px 5px 0 gray;
+  box-shadow: 0px 5px 5px 0 var(--box-shadow);
   font-size: 0.9rem;
 }
 .sent.msg {
@@ -314,12 +362,13 @@ body {
 /* chat inputs */
 #chat-inputs {
   height: 50px;
-  background-color: var(--chat-inputs-bg) ;
+  background-color: var(--chat-inputs-bg);
 }
 #msg-bar {
   height: 100%;
   padding: 0.2rem 1rem;
   border: 1px solid var(--input-border-color);
+  background-color: var(--input-bg);
   border-radius: 0.3rem;
 }
 #msg-bar:focus{
@@ -342,8 +391,8 @@ body {
   padding: 30vh 2rem;
   font-size: 2rem;
   color: var(--body-top-bg);
-  text-shadow: 0 0 3px rgba(0, 0, 0, 1);
-  background-color: rgba(0, 0, 0, 0.8);
+  text-shadow: 0 0 3px var(--alert-text-shadow);
+  background-color: var(--alert-bg);
 }
 .alert i {
   font-size: 10rem;
@@ -369,9 +418,10 @@ body {
 .emojisMenu .menu {
   height: 200px;
   width: 200px;
-  padding: 0.5rem;
+  padding: 0.3rem;
   overflow: auto;
-  border: 3px solid var(--app-border);
+  border: 2px solid var(--app-border);
+  font-size: 1.3rem;
 }
 .emojisMenu li{
   display: inline-block;

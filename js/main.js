@@ -12,7 +12,8 @@ const { createApp } = Vue
         msgBarPlaceholder : 'Scrivi un messaggio',
         searchBarInput : '' ,
         OPENAI_API_KEY : "",
-        screenWidth : window.screen.availWidth
+        screenWidth : window.screen.availWidth,
+        appFontSize: 1,
       }
     },
     mounted(){
@@ -342,6 +343,17 @@ const { createApp } = Vue
       },
       addEmoji(emojiCode){
         this.userMsg += String.fromCodePoint(emojiCode);
+      },
+      adjustFontSize(operation){
+        if(operation == "+"){
+          this.appFontSize < 3 ? this.appFontSize += 0.2 : '';
+        } else if (operation == "-") {
+          this.appFontSize > 0.8 ? this.appFontSize -= 0.2 : '';
+        }
+      },
+      toggleDarkMode(){
+        const everything = document.querySelectorAll('html *');
+        everything.forEach(tag => { tag.classList.toggle('dark') });
       }
     },
     computed: {
