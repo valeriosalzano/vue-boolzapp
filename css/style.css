@@ -76,6 +76,9 @@ html {
 .text-center {
   text-align: center;
 }
+button {
+  background-color: transparent;
+}
 .btn {
   border: none;
   padding: 0 0.2rem;
@@ -104,6 +107,12 @@ html {
   top: 0.5rem;
   right: 0;
   z-index: 9;
+}
+.dropup.menu-wrapper {
+  top: unset;
+  right: unset;
+  left: 0;
+  bottom: 0.5rem;
 }
 .menu-toggler {
   padding: 0.5rem;
@@ -355,6 +364,19 @@ body {
   background-color: darkslategray;
   z-index: 999;
   border: 5px solid black;
+}
+
+.emojisMenu .menu {
+  height: 200px;
+  width: 200px;
+  padding: 0.5rem;
+  overflow: auto;
+  border: 3px solid var(--app-border);
+}
+.emojisMenu li{
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 50%;
 }
 
 @media screen and (max-width: 1000px){

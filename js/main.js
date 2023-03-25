@@ -6,6 +6,7 @@ const { createApp } = Vue
         user,
         contacts,
         randomReplies,
+        emojis,
         selected:-1,
         userMsg : '',
         msgBarPlaceholder : 'Scrivi un messaggio',
@@ -24,14 +25,18 @@ const { createApp } = Vue
         setTimeout(()=> splashPage.classList.add('d-none'), 1000);
       },
       // al click dell'utente cambia il contatto mostrato
-      clickOnContact(index){
-        this.selected = index;
+      clickOnContact(contact){
+        this.selected = contact.position;
         this.resetMsgBarPlaceholder();
 
         // extra controlli per mobile
         this.screenWidth = window.screen.availWidth;
         if(this.screenWidth < 750){
           this.changePanel()
+        }
+
+        if(this.contacts[this.selected].messages.length){
+          this.goToLastMsg(0,'instant');
         }
       },
       changePanel(){
@@ -59,7 +64,7 @@ const { createApp } = Vue
             this.contacts[this.selected].lastAccess = 'Ultimo accesso molto tempo fa'
           }
         } else {
-          this.contactLastAccess = 'Offline'
+          this.contacts[this.selected].lastAccess = 'Online'
         }
       },
       // funzione che restituisce l'ultimo messaggio scambiato con un contatto
@@ -149,16 +154,6 @@ const { createApp } = Vue
           },2000)
         },1000*this.randomNumber(1,reqTime));
       },
-      // funzione che gestisce il funzionamento della search bar 
-      onContactSearching(){
-        if(!this.searchBarInput){
-          // caso 1: campo vuoto, scorro tutti i contatti e li rendo visibili
-          this.contacts.forEach( contact => contact.visible = true);
-        } else {
-          // caso 2: scorro la lista, il contatto è visibile se c'è un match nel nome
-          this.contacts.forEach( contact => contact.visible = contact.name.match(new RegExp(`${this.searchBarInput}`,'i')))
-        }
-      },
       // funzione che elimina il messaggio al click
       clickOnDeleteMsg(index){
         this.contacts[this.selected].messages.splice(index,1);
@@ -207,7 +202,6 @@ const { createApp } = Vue
             {
               name: name.value,
               avatar,
-              visible: true,
               messages: []
             }
           )
@@ -221,11 +215,12 @@ const { createApp } = Vue
         this.msgBarPlaceholder = 'Scrivi un messaggio';
       },
       // funzione che evidenzia l'ultimo messaggio scrollando fino a raggiungerlo
-      goToLastMsg(timer){
+      goToLastMsg(timer,behavior){
         setTimeout( ()=>{
           const lastMsgArray = document.querySelectorAll('.msg');
           const lastMsg =lastMsgArray[lastMsgArray.length-1];
-          lastMsg.scrollIntoView({behavior:"smooth"});
+          behavior? '' : behavior = 'smooth';
+          lastMsg.scrollIntoView({behavior:`${behavior}`});
         },timer);
       },
       // funzione che determina se è il primo messaggio del giorno per stamparne sopra la data
@@ -344,6 +339,18 @@ const { createApp } = Vue
         }
     
         oHttp.send(JSON.stringify(data));
+      },
+      addEmoji(emojiCode){
+        this.userMsg += String.fromCodePoint(emojiCode);
+      }
+    },
+    computed: {
+      filteredContacts() {
+        let contacts = this.contacts.filter( (contact,index) => {
+          contact.position = index;
+          return contact.name.match(new RegExp(`${this.searchBarInput}`,'i'));
+        });
+        return contacts;
       }
     }
   }).mount('#app');
