@@ -352,8 +352,8 @@ const { createApp } = Vue
         }
       },
       toggleDarkMode(){
-        const everything = document.querySelectorAll('html *');
-        everything.forEach(tag => { tag.classList.toggle('dark') });
+        const everything = document.querySelector('body');
+        everything.classList.toggle('dark');
       }
     },
     computed: {

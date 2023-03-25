@@ -46,7 +46,7 @@ html {
 }
 
 /* automatic dark mode */
-:root .dark {
+:root .dark * {
   /* backgrounds */
   --body-bg: #2d2d2d;
   --app-bg: #000;
