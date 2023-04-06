@@ -89,7 +89,7 @@ const { createApp } = Vue
           }
           this.contacts[this.selected].messages.push(
             { 
-            date: luxon.DateTime.now().toFormat('d/MM/yyyy HH:mm:ss'),
+            date: luxon.DateTime.now().toFormat('dd/MM/yyyy HH:mm:ss'),
             message: this.userMsg,
             status: 'sent'
             }
